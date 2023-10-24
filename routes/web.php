@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
+use App\Models\Post;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -21,5 +21,22 @@ Route::get('/lazy-cards', function () {
 })->name('lazy-cards');
 
 Route::get('/modal-form', function () {
-    return Inertia::render('ModalForm');
+    return Inertia::render('ModalForm', [
+        'post' => Inertia::lazy(function () {
+            //sleep(2); // simulate slow loading
+
+            return Post::find(1);
+        }),
+    ]);
 })->name('modal-form.index');
+
+Route::post('/modal-form/{post}', function (Request $request, Post $post) {
+    $validated = $request->validate([
+        'title' => 'required',
+        'body'  => 'required',
+    ]);
+
+    $post->update($validated);
+
+    return to_route('modal-form.index');
+})->name('modal-form.update');
