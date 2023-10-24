@@ -16,6 +16,10 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Demo');
-});
+Route::get('/lazy-cards', function () {
+    return Inertia::render('LazyCards');
+})->name('lazy-cards');
+
+Route::get('/modal-form', function () {
+    return Inertia::render('ModalForm');
+})->name('modal-form.index');
