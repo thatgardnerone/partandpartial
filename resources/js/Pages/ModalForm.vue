@@ -11,6 +11,7 @@ import { onMounted, ref } from "vue";
 
 const props = defineProps({
     post: Object,
+    random: String,
 });
 
 const isOpen = ref(false);
@@ -29,11 +30,13 @@ const form = useForm({
 });
 
 const updatePost = () => {
+    console.log('here');
     form.title ??= props.post.title;
     form.body ??= props.post.body;
 
     form.post(route("modal-form.update", { post: props.post.id }), {
         preserveState: true,
+        only: ['post'],
         onSuccess: () => {
             closeModal();
         },
@@ -41,6 +44,7 @@ const updatePost = () => {
 };
 
 onMounted(() => {
+    console.log('here');
     router.reload({
         only: ['post']
     })
@@ -52,7 +56,7 @@ onMounted(() => {
 
     <section class="mx-auto flex max-w-4xl flex-col gap-y-1 pt-6">
         <div class="space-y-2" v-if="post">
-            <h1 class="text-2xl font-bold text-gray-900">Sample Post</h1>
+            <h1 class="text-2xl font-bold text-gray-900">Sample Post ({{random}})</h1>
             <!-- TODO: Lazy-loaded data goes here -->
             <p>
                 Title:
@@ -118,7 +122,7 @@ onMounted(() => {
                                 Update post
                             </DialogTitle>
 
-                            <form @submit.prevent.passive="updatePost">
+                            <form @submit.prevent="updatePost">
                                 <div class="mt-2">
                                     <p class="text-sm text-gray-500">
                                         Enter some new details for the post, to

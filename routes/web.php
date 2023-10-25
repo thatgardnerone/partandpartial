@@ -20,12 +20,15 @@ Route::get('/lazy-cards', function () {
     return Inertia::render('LazyCards');
 })->name('lazy-cards');
 
+Route::post('/lazy-cards', function () {
+    return to_route('lazy-cards');
+})->name('lazy-cards');
+
 Route::get('/modal-form', function () {
     return Inertia::render('ModalForm', [
+        'random' => random_int(1, 100),
         'post' => Inertia::lazy(function () {
-            //sleep(2); // simulate slow loading
-
-            return Post::find(1);
+            return Post::find(2);
         }),
     ]);
 })->name('modal-form.index');
